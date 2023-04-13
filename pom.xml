@@ -11,6 +11,7 @@
         <module>consumer-order80</module>
         <module>common</module>
         <module>common-entity</module>
+        <module>eureka-server7001</module>
     </modules>
     <packaging>pom</packaging>
   <!-- 统一管理jar包版本 -->
