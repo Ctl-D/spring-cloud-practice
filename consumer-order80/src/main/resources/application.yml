@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: consumer-order-service
+    name: consumer-order-service80
 
 eureka:
   client:
