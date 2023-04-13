@@ -12,4 +12,4 @@ eureka:
     fetch-registry: false # 自己为服务端不用定期获取信息
     register-with-eureka: false # 因为是服务注册中心所以不用将自己注册
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/  # 其他客户端交互地址
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/  # 指定了Eureka客户端应该连接到哪个Eureka服务器来获取服务注册表信息
