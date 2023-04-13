@@ -12,6 +12,8 @@
         <module>common</module>
         <module>common-entity</module>
         <module>eureka-server7001</module>
+        <module>eureka-server7002</module>
+      <module>provider-payment8002</module>
     </modules>
     <packaging>pom</packaging>
   <!-- 统一管理jar包版本 -->

@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: 8002
 spring:
   application:
     name: provider-payment-service
@@ -23,4 +23,4 @@ eureka:
 #      defaultZone: http://localhost:7001/eureka     # 指定了Eureka客户端应该连接到哪个Eureka服务器来获取服务注册表信息
       defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka     # 指定了Eureka客户端应该连接到哪个Eureka服务器来获取服务注册表信息
   instance:
-    instance-id: provider-payment-service8001 #Eureka客户端实例的ID。如果未指定，则使用主机名:端口号的组合作为默认值。
+    instance-id: provider-payment-service8002 #Eureka客户端实例的ID。如果未指定，则使用主机名:端口号的组合作为默认值。

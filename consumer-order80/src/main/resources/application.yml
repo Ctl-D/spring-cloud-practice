@@ -10,8 +10,12 @@ eureka:
     register-with-eureka: true     # 注册到eureka服务
     fetch-registry: true # 定期从服务端获取服务注册并信息以供使用
     service-url:
-      defaultZone: http://localhost:7001/eureka      # 指定了Eureka客户端应该连接到哪个Eureka服务器来获取服务注册表信息
+#      defaultZone: http://localhost:7001/eureka      # 指定了Eureka客户端应该连接到哪个Eureka服务器来获取服务注册表信息
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka    # 指定了Eureka客户端应该连接到哪个Eureka服务器来获取服务注册表信息
+  instance:
+    instance-id: consumer-order-service #Eureka客户端实例的ID。如果未指定，则使用主机名:端口号的组合作为默认值。
 
 provider:
   service:
-    url: http://localhost:8001/
+#    url: http://localhost:8001/ #单机版
+    url: http://PROVIDER-PAYMENT-SERVICE/ # 集群版从注册中心获取服务，无需关注获取的是哪个服务，使用RestTemplte调用服务时，需要开启负载均衡功能

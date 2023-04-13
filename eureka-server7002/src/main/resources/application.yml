@@ -1,0 +1,20 @@
+server:
+  port: 7002
+
+spring:
+  application:
+    name: eureka-server-service
+
+# 集群版配置
+# 两个服务 eureka7001.com eureka7002.com
+
+eureka:
+  instance:
+    hostname: eureka7002.com #集群写法，一台电脑实现需要在C:\Windows\System32\drivers\etc中的hosts文件中添加配置 127.0.0.1 eureka7002.com
+  client:
+    fetch-registry: false # 自己为服务端不用定期获取信息
+    register-with-eureka: false # 因为是服务注册中心所以不用将自己注册
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/  # 集群之间服务需要相互注册，将其指向其他服务eureka7001.com
+
+# 集群版配置
