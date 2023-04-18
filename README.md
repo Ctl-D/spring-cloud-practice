@@ -2,7 +2,7 @@
 个人听课跟练项目
 
 ### zookeeper服务注册遇到的问题
-#### 1.pom中的zookeeper版本与服务器上的zookeeper版本问题
+##### 1.pom中的zookeeper版本与服务器上的zookeeper版本问题
 ```java
 父模块
 <dependency>
@@ -44,7 +44,7 @@
 </dependency>
 ```
 
-#### 2.服务注册到zookeeper连接超时
+##### 2.服务注册到zookeeper连接超时
 上述依赖问题解决后，服务可以正常启动了，但是在连接zookeeper一直超时
 ![](https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/connection_zookeeper_time_out.png)
 原因是因为服务器的防火墙是开启状态，拦截了外部对zookeeper端口的请求
