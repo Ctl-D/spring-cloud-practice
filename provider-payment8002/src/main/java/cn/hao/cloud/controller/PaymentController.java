@@ -7,8 +7,11 @@ import cn.hao.common.entity.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -16,6 +19,9 @@ import java.util.Objects;
 public class PaymentController {
 
     protected static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+
+    @Value("${server.port}")
+    private String serverPort;
 
     @Autowired
     private PaymentService paymentService;
@@ -27,12 +33,15 @@ public class PaymentController {
     }
 
     @GetMapping("get/{id}")
-    public Result<Payment> get(@PathVariable("id") Long id) {
+    public Result<Map<String, Object>> get(@PathVariable("id") Long id) {
         Payment payment = paymentService.get(id);
         if (Objects.isNull(payment)) {
             logger.error("查询信息不存在");
             return ResultTool.error("信息不存在");
         }
-        return ResultTool.success(payment);
+        Map<String, Object> result = new HashMap<>();
+        result.put("payment", payment);
+        result.put("port", serverPort);
+        return ResultTool.success(result);
     }
 }
