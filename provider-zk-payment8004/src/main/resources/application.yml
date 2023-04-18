@@ -1,0 +1,19 @@
+server:
+  port: 8004
+spring:
+  application:
+    name: provider-payment-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloud_practice?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+  cloud:
+    zookeeper:
+      connect-string: 192.168.137.100:2181
+
+mybatis:
+  mapper-locations: classpath*:cn/hao/**/mapper/*.xml  #将基础entity、mapper单独提一个模块 所以需要查询所有地方的mapper层 包括依赖
+  type-aliases-package: cn.hao.*.entity #指定实体类包
+

@@ -1,0 +1,13 @@
+server:
+  port: 9002
+
+spring:
+  application:
+    name: consumer-order-service
+  cloud:
+    zookeeper:
+      connect-string: 192.168.137.100:2181
+
+provider:
+  service:
+    url: http://provider-payment-service/ # 集群版从注册中心获取服务，无需关注获取的是哪个服务，使用RestTemplte调用服务时，需要开启负载均衡功能
