@@ -79,7 +79,9 @@ consul依赖管理版本
 order调用payment服务是，系统报出没有可用的payment服务。
 <br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/order_not_found_available_payemnt_service.png">
+<br>
 进入consul管理端，可以看到payment服务service健康状态并不是通过状态。
+<br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/all_service_check_failing.png">
 <br>
 <br>
@@ -89,6 +91,7 @@ order调用payment服务是，系统报出没有可用的payment服务。
 通过查看源码ConsulDiscoverProperties，health-check-url已经有了默认值"/actuator/health"，如果没有特定需求的话，这个值不用修改。
 <br>
 最后部分博客说开启心跳检测机制 spring.cloud.consul.discovery.heartbeat.enable = true，修改后问题解决。
+<br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/consul_heartbeat.default_value.png">
 <br>
 查询原因，查看当前引入的consul版本的源码，发现spring.cloud.consul.discovery.heartbeat.enable如果不设值心跳检测机制是关闭的。
