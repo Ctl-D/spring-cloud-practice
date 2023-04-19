@@ -17,6 +17,9 @@
         <module>provider-zk-payment8003</module>
       <module>provider-zk-payment8004</module>
       <module>consumer-zk-order9002</module>
+      <module>provider-consul-payment8005</module>
+      <module>provider-consul-payment8006</module>
+      <module>consumer-consul-order9003</module>
     </modules>
     <packaging>pom</packaging>
   <!-- 统一管理jar包版本 -->
@@ -86,10 +89,18 @@
         <version>${log4j.version}</version>
       </dependency>
 
+      <!--zookeeper 服务注册与发现-->
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-zookeeper-dependencies</artifactId>
         <version>2.2.0.RELEASE</version>
+      </dependency>
+
+      <!--consul 服务注册与发现-->
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-consul-dependencies</artifactId>
+        <version>2.2.1.RELEASE</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
