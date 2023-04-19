@@ -20,6 +20,7 @@
       <module>provider-consul-payment8005</module>
       <module>provider-consul-payment8006</module>
       <module>consumer-consul-order9003</module>
+      <module>consumer-custom-load-balancer-order9004</module>
     </modules>
     <packaging>pom</packaging>
   <!-- 统一管理jar包版本 -->
