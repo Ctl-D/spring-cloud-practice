@@ -9,6 +9,10 @@ public class ResultTool<T> {
         return new Result<T>(200, "success", data);
     }
 
+    public static <T> Result<T> success() {
+        return success(null);
+    }
+
     public static <T> Result<T> success(Integer code, String msg, T data) {
         return new Result<T>(code, msg, data);
     }

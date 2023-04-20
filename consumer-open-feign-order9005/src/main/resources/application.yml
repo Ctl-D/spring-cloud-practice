@@ -1,0 +1,23 @@
+server:
+  port: 9005
+
+spring:
+  application:
+    name: consumer-order-service
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: ${spring.application.name}
+
+# feign内置ribbon RPC服务调用实际受ribbon影响
+ribbon:
+  ReadTimeout: 4000
+
+logging:
+  level:
+    cn.hao.cloud.api.*: debug
