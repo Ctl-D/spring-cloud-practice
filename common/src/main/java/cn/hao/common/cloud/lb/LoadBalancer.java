@@ -10,4 +10,6 @@ public interface LoadBalancer {
     ServiceInstance instance (List<ServiceInstance> serviceInstances);
 
     ServiceInstance instance (String serviceId, DiscoveryClient discoveryClient);
+
+    ServiceInstance instance (String serviceId);
 }

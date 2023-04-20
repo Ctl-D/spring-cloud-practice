@@ -1,15 +1,21 @@
 package cn.hao.common.cloud.lb;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+@Order(-1)
+@Component
 public class CustomLoadBalancer implements LoadBalancer {
 
+    @Autowired
+    private DiscoveryClient dc;
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
@@ -38,6 +44,15 @@ public class CustomLoadBalancer implements LoadBalancer {
     public ServiceInstance instance(String serviceId, DiscoveryClient discoveryClient) {
         List<ServiceInstance> serviceInstance = getServiceInstance(serviceId, discoveryClient);
         return instance(serviceInstance);
+    }
+
+    @Override
+    public ServiceInstance instance(String serviceId) {
+        List<ServiceInstance> instanceList = dc.getInstances(serviceId);
+        if (CollectionUtils.isEmpty(instanceList)) {
+            throw new RuntimeException("没有找到" + serviceId + "相关服务");
+        }
+        return instance(instanceList);
     }
 
     private List<ServiceInstance> getServiceInstance(String serviceId, DiscoveryClient discoveryClient) {

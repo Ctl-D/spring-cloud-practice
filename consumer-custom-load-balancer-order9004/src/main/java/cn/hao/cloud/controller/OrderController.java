@@ -36,12 +36,12 @@ public class OrderController {
 
     @PostMapping("create")
     public Result<Payment> create(@RequestBody Payment payment) {
-        return restTemplate.postForObject(getUriV2() + "payment/create", payment, Result.class);
+        return restTemplate.postForObject(getUriV3() + "payment/create", payment, Result.class);
     }
 
     @GetMapping("get/{id}")
     public Result<Payment> get(@PathVariable("id") Long id) {
-        return restTemplate.getForObject(getUriV2() + "payment/get/" + id, Result.class);
+        return restTemplate.getForObject(getUriV3() + "payment/get/" + id, Result.class);
     }
 
     private URI getUri() {
@@ -56,6 +56,11 @@ public class OrderController {
 
     private URI getUriV2() {
         ServiceInstance serviceInstance = customLoadBalancer.instance(PROVIDER_SERVICE_NAME, discoveryClient);
+        return serviceInstance.getUri();
+    }
+
+    private URI getUriV3() {
+        ServiceInstance serviceInstance = customLoadBalancer.instance(PROVIDER_SERVICE_NAME);
         return serviceInstance.getUri();
     }
 }
