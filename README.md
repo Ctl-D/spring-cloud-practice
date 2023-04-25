@@ -4,14 +4,7 @@
 ### zookeeper服务注册遇到的问题
 ##### 1.pom中的zookeeper版本与服务器上的zookeeper版本问题
 ```
-父模块
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-zookeeper-dependencies</artifactId>
-  <version>2.2.0.RELEASE</version>
-</dependency>
-
-子项目初始引入依赖
+子项目初始引入依赖，不用定义版本，由父级项目spring-cloud-dependencies约束
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-zookeeper-discovery</artifactId>
@@ -67,12 +60,11 @@ firewall-cmd --reload
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/firewall_add_zookeeper_port_result.png">
 
 ### consul服务注册与发现问题
-consul依赖管理版本
+consul依赖管理版本，不用定义版本，由父级项目spring-cloud-dependencies约束
 ```
 <dependency>
-<groupId>org.springframework.cloud</groupId>
-<artifactId>spring-cloud-consul-dependencies</artifactId>
-<version>2.2.1.RELEASE</version>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-consul-discovery</artifactId>
 </dependency>
 ```
 ##### order模块调用payment模块失败
@@ -95,5 +87,66 @@ order调用payment服务是，系统报出没有可用的payment服务。
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/consul_heartbeat.default_value.png">
 <br>
 查询原因，查看当前引入的consul版本的源码，发现spring.cloud.consul.discovery.heartbeat.enable如果不设值心跳检测机制是关闭的。
+<br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/resolve_all_service_check_failing_problem.png">
 
+### OpenFeign服务调用
+##### 在服务器熔断项目上练习出现的问题
+###### @FeignClients(name = "provider-payment-service")两个类上都是调用的同一个服务
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/open-feign-build/feignClientSpecification_could_not_be_registered_error.png">
+<br>
+解决方式：配置文件上配置spring.main.allow-bean-definition-overriding=true
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/open-feign-build/feignClientSpecification_could_not_be_registered.png">
+<br>
+##### @FeignClients的fallback属性不生效
+使其生效需要配置feign.hystrix.enable=true
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/open-feign-build/enable_hystrix_circuit_breaker.png">
+
+### Hystrix服务降级熔断问题
+首先子项目需要引入Hystrix的依赖，不用定义版本，由父级项目spring-cloud-dependencies约束
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+</dependency>
+```
+##### 启用断路器两种方式
+此处服务注入到了eurake
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/hystrix_project_use_annotation.png">
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/spring_cloud_annotation.png">
+<br>
+上述两种方式，都可以使断路器启用
+
+##### 降级方法写法问题报错
+###### 1.请求方法参数与fallback方法参数不一致
+此处举例为请求方法有参，fallback方法无参写法，
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/was_not_found_fallback_method_error_example.png">
+<br>
+错误信息：找不到对应方法
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/was_not_found_fallback_method_error.png">
+<br>
+##### 2.请求方法返参与fallback方法返参不一致
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/fallback_method_incompatible_return_types_error_example.png">
+<br>
+错误信息：返回参数不兼容
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/fallback_method_incompatible_return_types.png">
+<br>
+
+###### 正确写法
+无参
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/no_parameter_request_fallback_method.png">
+<br>
+请求方法返回类型向下兼容
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/return_types_downward_compatibility.png">
+<br>
+上述情况说明，请求方法和fallback方法的返回类型，请求参数需要一致

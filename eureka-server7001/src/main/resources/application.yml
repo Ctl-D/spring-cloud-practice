@@ -29,6 +29,7 @@ eureka:
     fetch-registry: false # 自己为服务端不用定期获取信息
     register-with-eureka: false # 因为是服务注册中心所以不用将自己注册
     service-url:
-      defaultZone: http://eureka7002.com:7002/eureka/  # 集群之间服务需要相互注册，将其指向其他服务eureka7002.com
+#      defaultZone: http://eureka7002.com:7002/eureka/  # 集群之间服务需要相互注册，将其指向其他服务eureka7002.com
+      defaultZone: http://eureka7001.com:7001/eureka/
 
 # 集群版配置

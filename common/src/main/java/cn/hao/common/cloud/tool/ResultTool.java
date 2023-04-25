@@ -21,6 +21,10 @@ public class ResultTool<T> {
         return new Result<T>(500, msg, null);
     }
 
+    public static <T> Result<T> error(T data) {
+        return new Result<T>(500, "error", data);
+    }
+
     public static <T> Result<T> error(Integer code, String msg, T data) {
         return new Result<T>(code, msg, data);
     }

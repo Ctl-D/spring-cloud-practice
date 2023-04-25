@@ -1,0 +1,27 @@
+server:
+  port: 9006
+
+spring:
+  application:
+    name: consumer-order-service
+
+  main:
+    allow-bean-definition-overriding: true #允许存在多个Feign调用相同Service的接口
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+  instance:
+    instance-id: ${spring.application.name}
+
+feign:
+  hystrix:
+    enabled: true #允许启用或禁用与 Hystrix 断路器库的集成。
+
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
