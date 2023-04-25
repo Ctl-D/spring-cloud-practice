@@ -59,6 +59,7 @@ firewall-cmd --reload
 ```
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/firewall_add_zookeeper_port_result.png">
 <br>
+<br>
 
 ### consul服务注册与发现问题
 consul依赖管理版本，不用定义版本，由父级项目spring-cloud-dependencies约束
