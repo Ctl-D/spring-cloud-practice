@@ -1,0 +1,39 @@
+server:
+  port: 5153
+
+spring:
+  application:
+    name: gateway-service
+
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: provider-payment-route #自定义服务对应的路由名称
+#          uri: localhost:8008/
+#          predicates:
+#            - Path=/gateway/payment/** #断言方式之一：匹配请求路径
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  #开启从服务注册中心获取服务动态生成路由
+          lower-case-service-id: true # 服务名称转为小写
+      routes:
+        - id: provider-payment-route
+          uri: lb://provider-payment-service/ #lb:// 负载均衡方式分配到指定服务 lb(load balancer)
+          predicates:
+            - Path=/gateway/payment/**
+        - id: consumer-order-route
+          uri: lb://consumer-order-service/
+          predicates:
+            - Path=/gateway/order/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+  instance:
+    instance-id: ${spring.application.name}

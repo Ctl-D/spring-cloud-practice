@@ -1,6 +1,8 @@
 package cn.hao.common.entity;
 
-public class Result<T> {
+import java.io.Serializable;
+
+public class Result<T> implements Serializable {
 
     private Integer code;
 

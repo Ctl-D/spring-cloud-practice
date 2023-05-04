@@ -25,6 +25,10 @@
         <module>consumer-open-feign-order9005</module>
         <module>consumer-hystrix-order9006</module>
         <module>provider-hystrix-payment8007</module>
+        <module>gateway5153</module>
+        <module>provider-gateway-payment8008</module>
+        <module>consumer-gateway-order9007</module>
+        <module>provider-gateway-payment8009</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 统一管理jar包版本 -->
