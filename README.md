@@ -205,7 +205,7 @@ spring:
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/gateway-build/modify_response_body_function_apply_location.png">
 <br>
 <br>
-**但是自定义修改响应体的过滤器必须在NettyWriteResponseFilter之后。**
+**但是自定义修改响应体的过滤器必须在NettyWriteResponseFilter之前。**
 <br>
 <br>
 **NettyWriteResponseFilter是一个Netty的过滤器，它的作用是在服务器端将响应数据写回到客户端之前进行一些操作。
