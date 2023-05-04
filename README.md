@@ -158,4 +158,61 @@ order调用payment服务是，系统报出没有可用的payment服务。
 <br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/return_types_downward_compatibility.png">
 <br>
-上述情况说明，请求方法和fallback方法的返回类型，请求参数需要一致
+上述情况说明，请求方法和fallback方法的返回类型，请求参数需要一致。
+<br>
+<br>
+### Gateway网关服务构建的问题
+##### **关于配置文件中uri如何写**
+能够确定只有一台服务时，此处以payment为例
+<br>
+```
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: provider-payment-route #自定义服务对应的路由名称
+          uri: localhost:8008/
+          predicates:
+            - Path=/gateway/payment/** #断言方式之一：匹配请求路径
+```
+当多台服务需要负载均衡时，首先需要开启从服务中心发现服务功能，其次需要uri以：lb://服务中心的对应服务名称格式书写 （lb相当于load balancer负载均衡）
+<br>
+```
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  #开启从服务注册中心获取服务动态生成路由
+          lower-case-service-id: true # 服务名称转为小写
+      routes:
+        - id: provider-payment-route
+          uri: lb://provider-payment-service/ #lb:// 负载均衡方式分配到指定服务 lb(load balancer)
+          predicates:
+            - Path=/gateway/payment/**
+        - id: consumer-order-route
+          uri: lb://consumer-order-service/
+          predicates:
+            - Path=/gateway/order/**
+
+```
+<br>
+
+##### 修改响应体信息过滤器执行条件
+自定义修改响应体内容的过滤器，核心就是配置ModifyResponseBodyGatewayFilterFactory的Config属性，在ModifyResponseBodyGatewayFilterFactory执行过滤器方法时，
+会执行Config中的自定义RewriteFunction函数，下方就是配置ModifyResponseBodyGatewayFilterFactory.filter执行自定义修改响应体方法位置。
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/gateway-build/modify_response_body_function_apply_location.png">
+<br>
+<br>
+**但是自定义修改响应体的过滤器必须在NettyWriteResponseFilter之后。**
+<br>
+<br>
+**NettyWriteResponseFilter是一个Netty的过滤器，它的作用是在服务器端将响应数据写回到客户端之前进行一些操作。
+<br>
+具体来说，NettyWriteResponseFilter会在Netty的ChannelPipeline中注册一个ChannelOutboundHandler，在响应数据写回到客户端之前，通过这个Handler对响应数据进行拦截、修改或者其他处理。**
+<br>
+下方是writeWith方法实际开始调用执行位置
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/gateway-build/wirteWith_method_apply_location.png">
+<br>
