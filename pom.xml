@@ -29,6 +29,10 @@
         <module>provider-gateway-payment8008</module>
         <module>consumer-gateway-order9007</module>
         <module>provider-gateway-payment8009</module>
+        <module>config-center</module>
+        <module>consumer-config-order9008</module>
+        <module>provider-config-payment8010</module>
+        <module>provider-config-payment8011</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 统一管理jar包版本 -->

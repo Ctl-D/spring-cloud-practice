@@ -1,0 +1,9 @@
+spring:
+  profiles: dev
+
+provider:
+  service:
+    url: http://provider-payment-service/
+
+change:
+  info: 123245678

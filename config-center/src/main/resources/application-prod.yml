@@ -1,0 +1,29 @@
+server:
+  port: 5555
+
+spring:
+  application:
+    name: config-center-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: xxxx #git 仓库地址
+          search-paths:
+            - config
+            - test-config
+          timeout: 6000
+          skip-ssl-validation: true
+          force-pull: true
+      label: master
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+  instance:
+    instance-id: ${spring.application.name}
+

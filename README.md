@@ -44,6 +44,7 @@
 上述依赖问题解决后，服务可以正常启动了，但是在连接zookeeper一直超时
 <br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/connection_zookeeper_time_out.png">
+<br>
 原因是因为服务器的防火墙是开启状态，拦截了外部对zookeeper端口的请求
 <br>
 解决方法：
@@ -214,3 +215,113 @@ spring:
 <br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/gateway-build/wirteWith_method_apply_location.png">
 <br>
+
+### config配置中心搭建
+##### 配置中心自身按环境启用配置（自身多配置启用问题）
+在我搭建配置中心的时候，单文件的写法是没有问题，但是分为了两个配置文件，一个dev,一个prod，dev的配置是采用native模式，prod的配置采用的是git模式，在激活文件的时候就出现了问题
+##### spring.profiles.active直接激活dev文件
+```
+application.yml配置
+
+spring:
+  profiles:
+    active: dev
+    
+application-dev.yml配置
+
+server:
+  port: 5555
+spring:
+  application:
+    name: config-center-service
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config/,classpath:/test-config/,classpath:/config,classpath:/test-config
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+  instance:
+    instance-id: ${spring.application.name}
+```
+<br>
+按照上述配置启动项目是启动不起来的,错误信息如下：
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_error_info1.png">
+<br>
+首先得知道，config配置中心服务端策略默认采用的是git方式，在使用native从本地获取配置的时候，需要搭配spring.profiles.active=native，激活native profile，
+<br>
+才能使用native否则还是默认实现git,由此可以知道，上述配置application.yml中直接指定dev，并没有激活native，项目启动激活的配置信息如下：
+<br>
+
+**config配置中心服务端策略默认采用的是git方式**
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/explain1.png">
+<br>
+**config配置中心启用native配置**
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/explain2.png">
+<br>
+项目启动激活的配置信息如下，显示的信息只有dev被激活
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_error_info2.png">
+<br>
+激活配置文件有两种配置方式一种是spring.profiles.active，另一种是spring.profiles.include，active指定一个激活文件，指定的激活文件中如果再次使用是无效的，
+<br>
+
+**include的作用也是激活文件，只不过他优先于同级的active**
+<br>
+如果要激活dev中的native，则需要在dev中添加spring.profiles.include:native
+```
+server:
+  port: 5555
+spring:
+  application:
+    name: config-center-service
+  profiles:
+    include:
+      - native
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config/,classpath:/test-config/,classpath:/config,classpath:/test-config
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+  instance:
+    instance-id: ${spring.application.name}
+```
+启动项目，native配置激活成功
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_success_info.png">
+<br>
+##### git配置更新或者server本地配置更新，不重启client端，手动刷新client配置
+Spring Boot actuator 监控组件来监控配置的变化，使我们可以在不重启 Config client端的情况下获取到了最新配置，原理如下图。
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/manually_refresh_flowchart.png">
+<br>
+上述流程只需要我们在client端的配置文件添加相关配置，以及需要获取更新的controller层添加@RefreshScope，然后执行更新命令即可。
+<br>
+```
+# Spring Boot 2.50对 actuator 监控屏蔽了大多数的节点，只暴露了 health 节点，本段配置（*）就是为了开启所有的节点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  #*为关键字所以需要用引号处理
+```
+上述手动刷新的弊端就是，后续client端变多了，我们需要每一个client都执行更新请求命令，这就不合理了，其实Spring Cloud Config配合Bus可以实现“一次通知，处处生效”动态刷新功能。
+
+
