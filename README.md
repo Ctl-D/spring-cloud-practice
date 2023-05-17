@@ -256,7 +256,6 @@ eureka:
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_error_info1.png">
 <br>
 首先得知道，config配置中心服务端策略默认采用的是git方式，在使用native从本地获取配置的时候，需要搭配spring.profiles.active=native，激活native profile，
-<br>
 才能使用native否则还是默认实现git，由此可以知道，上述配置application.yml中直接指定dev，并没有激活native，项目启动激活的配置信息如下：
 <br>
 
