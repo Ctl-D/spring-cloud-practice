@@ -218,7 +218,7 @@ spring:
 
 ### config配置中心搭建
 ##### 配置中心自身按环境启用配置（自身多配置启用问题）
-在我搭建配置中心的时候，单文件的写法是没有问题，但是分为了两个配置文件，一个dev,一个prod，dev的配置是采用native模式，prod的配置采用的是git模式，在激活文件的时候就出现了问题
+在我搭建配置中心的时候，单文件的写法是没有问题，但是分为了两个配置文件，一个dev，一个prod，dev的配置是采用native模式，prod的配置采用的是git模式，在激活文件的时候就出现了问题
 ##### spring.profiles.active直接激活dev文件
 ```
 application.yml配置
@@ -251,13 +251,13 @@ eureka:
     instance-id: ${spring.application.name}
 ```
 <br>
-按照上述配置启动项目是启动不起来的,错误信息如下：
+按照上述配置启动项目是启动不起来的，错误信息如下：
 <br>
 <img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_error_info1.png">
 <br>
 首先得知道，config配置中心服务端策略默认采用的是git方式，在使用native从本地获取配置的时候，需要搭配spring.profiles.active=native，激活native profile，
 <br>
-才能使用native否则还是默认实现git,由此可以知道，上述配置application.yml中直接指定dev，并没有激活native，项目启动激活的配置信息如下：
+才能使用native否则还是默认实现git，由此可以知道，上述配置application.yml中直接指定dev，并没有激活native，项目启动激活的配置信息如下：
 <br>
 
 **config配置中心服务端策略默认采用的是git方式**
