@@ -322,5 +322,36 @@ management:
         include: "*"  #*为关键字所以需要用引号处理
 ```
 上述手动刷新的弊端就是，后续client端变多了，我们需要每一个client都执行更新请求命令，这就不合理了，其实Spring Cloud Config配合Bus可以实现“一次通知，处处生效”动态刷新功能。
+<br>
+##### Bus动态刷新配置
 
+上述方法是对每一个client端手动执行命令，刷新client端，如果client很少，其实影响不大，但是如果多了就会很麻烦，这里解决的方式是添加Spring Cloud Bus消息总线框架，以广播的方式通知client自行刷新配置，
+这里使用的是触发配置中心的bus/refresh端，然后通过配置中心广播给其他client端。
+<br>
+在配置中心，已经client端添加以下依赖
+```
+<!--消息总线bus-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
+```
+然后在配置中心添加MQ的相关配置，client端之前添加过暴露端点，现在只需在配置中心暴露bus-refresh端点，配置如下
+```
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'
+```
+执行命令如下
+```
+ip:prot 此处为配置中心地址和端口
+application 此处为服务名称
+所有服务都进行更新
+curl -X POST "ip:port/actuator/bus-refresh" 
+指定服务进行更新 
+curl -X POST "ip:port/actuator/bus-refresh/{application}:{port}" 
+```
+如果config中心使用的是native模式，修改了文件则需要重启配置中心服务，因为jar中打包的配置文件通过执行命令是无法修改的，而使用git方式的配置，配置中心会重新从git上获取
 
