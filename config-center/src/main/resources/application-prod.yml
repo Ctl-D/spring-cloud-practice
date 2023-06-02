@@ -17,6 +17,10 @@ spring:
           force-pull: true
       label: master
 
+  rabbitmq:
+    host: 192.168.137.100
+    username: root
+    password: root
 
 eureka:
   client:
@@ -26,4 +30,12 @@ eureka:
       defaultZone: http://eureka7001.com:7001/eureka/
   instance:
     instance-id: ${spring.application.name}
+
+
+#  对 actuator 监控暴露bus-refresh节点，结合mq，刷新配置中心通知其他服务更新
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'
 

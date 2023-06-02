@@ -1,9 +1,13 @@
 spring:
   profiles: dev
+  rabbitmq:
+    host: 192.168.137.100
+    username: root
+    password: root
 
 provider:
   service:
     url: http://provider-payment-service/
 
 change:
-  info: 123245678
+  info: order1234

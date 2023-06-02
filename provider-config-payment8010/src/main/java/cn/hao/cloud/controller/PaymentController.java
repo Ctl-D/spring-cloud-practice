@@ -54,6 +54,7 @@ public class PaymentController {
     public Result<Map<String, Object>> configChangeInfo() {
         Map<String, Object> data = new HashMap<>();
         data.put("paymentConfigChangeInfo", paymentConfigChangeInfo);
+        data.put("paymentPort", serverPort);
         return ResultTool.success(data);
     }
 }

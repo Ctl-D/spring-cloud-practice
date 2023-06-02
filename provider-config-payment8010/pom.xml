@@ -58,5 +58,12 @@
             <artifactId>common-entity</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+
+        <!--消息总线bus-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
     </dependencies>
 </project>

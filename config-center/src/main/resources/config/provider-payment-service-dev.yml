@@ -8,11 +8,16 @@ spring:
     username: root
     password: root
 
+  rabbitmq:
+    host: 192.168.137.100
+    username: root
+    password: root
+
 mybatis:
   mapper-locations: classpath*:cn/hao/**/mapper/*.xml  #将基础entity、mapper单独提一个模块 所以需要查询所有地方的mapper层 包括依赖
   type-aliases-package: cn.hao.*.entity #指定实体类包
 
 
 change:
-  info: asdfdgfhgj
+  info: payment1234
 
