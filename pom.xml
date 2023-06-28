@@ -33,6 +33,9 @@
         <module>consumer-config-order9008</module>
         <module>provider-config-payment8010</module>
         <module>provider-config-payment8011</module>
+        <module>stream-mq-producer8801</module>
+        <module>stream-mq-consumer8802</module>
+        <module>stream-mq-consumer8803</module>
     </modules>
     <packaging>pom</packaging>
     <!-- 统一管理jar包版本 -->

@@ -355,3 +355,89 @@ curl -X POST "ip:port/actuator/bus-refresh/{application}:{port}"
 ```
 如果config中心使用的是native模式，修改了文件则需要重启配置中心服务，因为jar中打包的配置文件通过执行命令是无法修改的，而使用git方式的配置，配置中心会重新从git上获取
 
+### Stream消息驱动
+##### **常规配置**
+```
+spring:
+  application:
+    name: stream-mq-consumer-service
+  rabbitmq:
+    host: 192.168.137.100
+    username: root
+    password: root
+    port: 5672
+
+  cloud:
+    stream:
+      binders:  #使用的消息绑定中间件
+        rabbit:  #自定义名称，用于dinding整合
+          type: rabbit #消息组件类型
+          environment: #相关环境配置
+            spring:
+              rabbitmq:
+                host: 192.168.137.100
+                port: 5672
+                username: root
+                password: root
+      bindings: #服务整合
+        input:   #Source自带通道名称 发送消息
+          destination: message-topic #exchange名称
+          content-type: application/json #消息类型
+          binder: rabbit  #具体消息服务设置 爆红不影响使用
+```
+如果是在本地开启的RabbitMq Server，上述spring下的rabbitmq配置则不用进行配置可以省略，如果是在远端服务器上的RabbitMq Server则需要配置spring下rabbitmq配置，不然会报错，原因是项目启动时，会尝试两次连接rabbitmq，首先会按照stream配置进行连接，连接成功，但是程序在后面会二次连接，连接方式则是按照spring.rabbitmq的配置进行连接，如果没有配置默认访问的是本地服务，如若本地没有服务则会报错。
+
+##### **分组消费**
+当两个相同处理业务分布在两个服务，但是在接收到消息时候，我们希望消息只被一个服务进行消费，而不是多个服务重复消费，在消费者配置中存在一个属性group，默认不定义该属性的时候，会生成一个随机的字符串且不相同。而group属性的功能是，相同组别通道进行轮询消费，不同组别同一消息会重复消费。
+##### **自定义配置**
+按照Stream自带的Source、Sink接口，我们可以自定义通道配置
+```
+//Custom Source 自定义消费者通道
+public interface CustomChannel {
+
+    String OUT_PUT = "custom-output-channel";
+
+    @Output(OUT_PUT)
+    MessageChannel output();
+}
+
+//Custom Sink 自定义消费者通道
+public interface CustomChannel {
+
+    String IN_PUT = "custom-input-channel";
+
+    @Input(IN_PUT)
+    SubscribableChannel input();
+}
+```
+按照自定义配置我们可以实现如下效果，生产自定义通道只给自己关联的exchange发送消息，消费自定义通道同时监听两个exchange
+<br>
+<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/stream-build/custom_channel_diagram.png">
+<br>
+具体配置如下
+<br>
+```
+生产者
+      bindings:
+        output:  #Source 自带通道
+          destination: message-topic
+          content-type: application/json
+          binder: rabbit
+        custom-output-channel:  #自定义通道
+          destination: custom-topic
+          content-type: application/json
+          binder: rabbit
+          
+消费者
+      bindings:
+        input: #Sink自带通道
+          destination: message-topic
+          content-type: application/json
+          binder: rabbit
+          group: group1
+        custom-input-channel: #自定义通道同时与message-topic,custom-topic绑定
+          destination: message-topic,custom-topic
+          content-type: application/json
+          binder: rabbit
+```
+
