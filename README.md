@@ -43,7 +43,7 @@
 ##### 2.服务注册到zookeeper连接超时
 上述依赖问题解决后，服务可以正常启动了，但是在连接zookeeper一直超时
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/connection_zookeeper_time_out.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/connection_zookeeper_time_out.png">
 <br>
 原因是因为服务器的防火墙是开启状态，拦截了外部对zookeeper端口的请求
 <br>
@@ -58,7 +58,7 @@ systemctl stop firewalld
 firewall-cmd --add-port=2181/tcp --permanent
 firewall-cmd --reload
 ```
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/firewall_add_zookeeper_port_result.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/zookeeper-bulid/firewall_add_zookeeper_port_result.png">
 <br>
 <br>
 
@@ -75,11 +75,11 @@ consul依赖管理版本，不用定义版本，由父级项目spring-cloud-depe
 ##### order模块调用payment模块失败
 order调用payment服务是，系统报出没有可用的payment服务。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/order_not_found_available_payemnt_service.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/consul-build/order_not_found_available_payemnt_service.png">
 <br>
 进入consul管理端，可以看到payment服务service健康状态并不是通过状态。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/all_service_check_failing.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/consul-build/all_service_check_failing.png">
 <br>
 <br>
 **问题解决**
@@ -89,28 +89,28 @@ order调用payment服务是，系统报出没有可用的payment服务。
 <br>
 最后部分博客说开启心跳检测机制 spring.cloud.consul.discovery.heartbeat.enable = true，修改后问题解决。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/consul_heartbeat.default_value.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/consul-build/consul_heartbeat.default_value.png">
 <br>
 查询原因，查看当前引入的consul版本的源码，发现spring.cloud.consul.discovery.heartbeat.enable如果不设值心跳检测机制是关闭的。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/consul-build/resolve_all_service_check_failing_problem.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/consul-build/resolve_all_service_check_failing_problem.png">
 <br>
 <br>
 
 ### OpenFeign服务调用
 ##### 在服务器熔断项目上练习出现的问题
 ###### **@FeignClients(name = "provider-payment-service")两个类上都是调用的同一个服务**
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/open-feign-build/feignClientSpecification_could_not_be_registered_error.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/open-feign-build/feignClientSpecification_could_not_be_registered_error.png">
 <br>
 解决方式：配置文件上配置spring.main.allow-bean-definition-overriding=true
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/open-feign-build/feignClientSpecification_could_not_be_registered.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/open-feign-build/feignClientSpecification_could_not_be_registered.png">
 <br>
 
 ###### **@FeignClients的fallback属性不生效**
 使其生效需要配置feign.hystrix.enable=true
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/open-feign-build/enable_hystrix_circuit_breaker.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/open-feign-build/enable_hystrix_circuit_breaker.png">
 <br>
 <br>
 ### Hystrix服务降级熔断问题
@@ -124,9 +124,9 @@ order调用payment服务是，系统报出没有可用的payment服务。
 ##### 启用断路器两种方式
 此处服务注入到了eurake
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/hystrix_project_use_annotation.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/hystrix_project_use_annotation.png">
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/spring_cloud_annotation.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/spring_cloud_annotation.png">
 <br>
 上述两种方式，都可以使断路器启用
 <br>
@@ -135,29 +135,29 @@ order调用payment服务是，系统报出没有可用的payment服务。
 ###### **1.请求方法参数与fallback方法参数不一致**
 此处举例为请求方法有参，fallback方法无参写法，
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/was_not_found_fallback_method_error_example.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/was_not_found_fallback_method_error_example.png">
 <br>
 错误信息：找不到对应方法
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/was_not_found_fallback_method_error.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/was_not_found_fallback_method_error.png">
 <br>
 ###### **2.请求方法返参与fallback方法返参不一致**
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/fallback_method_incompatible_return_types_error_example.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/fallback_method_incompatible_return_types_error_example.png">
 <br>
 错误信息：返回参数不兼容
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/fallback_method_incompatible_return_types.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/fallback_method_incompatible_return_types.png">
 <br>
 
 ###### **正确写法**
 无参
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/no_parameter_request_fallback_method.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/no_parameter_request_fallback_method.png">
 <br>
 请求方法返回类型向下兼容
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/hystrix-build/return_types_downward_compatibility.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/hystrix-build/return_types_downward_compatibility.png">
 <br>
 上述情况说明，请求方法和fallback方法的返回类型，请求参数需要一致。
 <br>
@@ -203,7 +203,7 @@ spring:
 自定义修改响应体内容的过滤器，核心就是配置ModifyResponseBodyGatewayFilterFactory的Config属性，在ModifyResponseBodyGatewayFilterFactory执行过滤器方法时，
 会执行Config中的自定义RewriteFunction函数，下方就是配置ModifyResponseBodyGatewayFilterFactory.filter执行自定义修改响应体方法位置。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/gateway-build/modify_response_body_function_apply_location.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/gateway-build/modify_response_body_function_apply_location.png">
 <br>
 **但是自定义修改响应体的过滤器必须在NettyWriteResponseFilter之前。**
 <br>
@@ -213,7 +213,7 @@ spring:
 <br>
 下方是writeWith方法实际开始调用执行位置
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/gateway-build/wirteWith_method_apply_location.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/gateway-build/wirteWith_method_apply_location.png">
 <br>
 
 ### config配置中心搭建
@@ -253,7 +253,7 @@ eureka:
 <br>
 按照上述配置启动项目是启动不起来的，错误信息如下：
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_error_info1.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/config-build/start_error_info1.png">
 <br>
 首先得知道，config配置中心服务端策略默认采用的是git方式，在使用native从本地获取配置的时候，需要搭配spring.profiles.active=native，激活native profile，
 才能使用native否则还是默认实现git，由此可以知道，上述配置application.yml中直接指定dev，并没有激活native，项目启动激活的配置信息如下：
@@ -261,15 +261,15 @@ eureka:
 
 **config配置中心服务端策略默认采用的是git方式**
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/explain1.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/config-build/explain1.png">
 <br>
 **config配置中心启用native配置**
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/explain2.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/config-build/explain2.png">
 <br>
 项目启动激活的配置信息如下，显示的信息只有dev被激活
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_error_info2.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/config-build/start_error_info2.png">
 <br>
 激活配置文件有两种配置方式一种是spring.profiles.active，另一种是spring.profiles.include，active指定一个激活文件，指定的激活文件中如果再次使用是无效的，
 <br>
@@ -304,12 +304,12 @@ eureka:
 ```
 启动项目，native配置激活成功
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/start_success_info.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/config-build/start_success_info.png">
 <br>
 ##### git配置更新或者server本地配置更新，不重启client端，手动刷新client配置
 Spring Boot actuator 监控组件来监控配置的变化，使我们可以在不重启 Config client端的情况下获取到了最新配置，原理如下图。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/config-build/manually_refresh_flowchart.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/config-build/manually_refresh_flowchart.png">
 <br>
 上述流程只需要我们在client端的配置文件添加相关配置，以及需要获取更新的controller层添加@RefreshScope，然后执行更新命令即可。
 <br>
@@ -392,7 +392,7 @@ spring:
 <br>
 配置进行group的配置，则会支持持久化，当我将消费者服务关闭，并且修改group组别，然后生产者发送消息，再重新启动消费者，服务启动后消息没有被消费，当我把消费者的group改回来的重启后，生产者发送的消息则被消费了。当我将所有服务关闭，rabbitmq可视化页面可以看到group的队列依然存在。
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/stream-build/data_persistence.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/stream-build/data_persistence.png">
 <br>
 ##### **自定义配置**
 按照Stream自带的Source、Sink接口，我们可以自定义通道配置
@@ -417,7 +417,7 @@ public interface CustomChannel {
 ```
 按照自定义配置我们可以实现如下效果，生产自定义通道只给自己关联的exchange发送消息，消费自定义通道同时监听两个exchange
 <br>
-<img src="https://github.com/AntsUnderTheStars/spring-cloud-practice/blob/master/note-img/stream-build/custom_channel_diagram.png">
+<img src="https://github.com/Ctl-D/spring-cloud-practice/blob/master/note-img/stream-build/custom_channel_diagram.png">
 <br>
 具体配置如下
 <br>
